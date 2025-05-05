@@ -207,8 +207,7 @@ function FunctionExpressionNode({
 
 	const handleArgDelete = (index: number) => {
 		if (onUpdate) {
-			const newArgs = [...exp.args]
-			newArgs.splice(index, 1)
+			const newArgs = exp.args.filter((_, i) => i !== index)
 			onUpdate({
 				...exp,
 				args: newArgs,
@@ -221,16 +220,6 @@ function FunctionExpressionNode({
 			onUpdate({
 				...exp,
 				args: [...exp.args, { type: "empty" } as any],
-			})
-		}
-	}
-
-	const removeArgument = (index: number) => {
-		if (onUpdate) {
-			const newArgs = exp.args.filter((_, i) => i !== index)
-			onUpdate({
-				...exp,
-				args: newArgs,
 			})
 		}
 	}
