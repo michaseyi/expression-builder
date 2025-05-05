@@ -1,28 +1,33 @@
 import { useState } from "react"
 
+type Return = "string" | "number" | "boolean"
+
 type Expression = FunctionCall | Operation | Literal | Variable
 
 type FunctionCall = {
 	type: "function"
 	name: string
 	args: Expression[]
+	return: Return
 }
 
 type Operation = {
 	type: "operation"
 	operator: string
 	operands: Expression[]
+	return?: Return
 }
 
 type Literal = {
 	type: "literal"
 	value: string | number | boolean
-	return: "string" | "number" | "boolean"
+	return: Return
 }
 
 type Variable = {
 	type: "variable"
 	name: string
+	return: Return
 }
 
 type EmptyExpression = {
@@ -44,9 +49,10 @@ const createLiteral = (value: string | number | boolean): Literal => {
 	}
 }
 
-const createVariable = (name: string): Variable => ({
+const createVariable = (name: string, returnType: Return = "number"): Variable => ({
 	type: "variable",
 	name,
+	return: returnType,
 })
 
 const createOperation = (operator: string, operands: Expression[]): Operation => ({
@@ -55,10 +61,15 @@ const createOperation = (operator: string, operands: Expression[]): Operation =>
 	operands,
 })
 
-const createFunction = (name: string, args: Expression[] = []): FunctionCall => ({
+const createFunction = (
+	name: string,
+	args: Expression[] = [],
+	returnType: Return = "number"
+): FunctionCall => ({
 	type: "function",
 	name,
 	args,
+	return: returnType,
 })
 
 type ExpressionNodeProp = {
@@ -458,6 +469,7 @@ function VariableExpressionNode({
 			onUpdate({
 				type: "variable",
 				name: variableName,
+				return: exp.return,
 			})
 		}
 		setIsEditing(false)
@@ -622,7 +634,7 @@ function OperationExpressionNode({
 	}
 
 	return (
-		<div className="rounded-lg shadow-md bg-amber-50 border border-amber-300 p-3 relative">
+		<div className="rounded-lg shadow-md bg-amber-50 border border-amber-300 p-3.5 relative">
 			{editable && onDelete && (
 				<button
 					onClick={onDelete}
