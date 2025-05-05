@@ -31,7 +31,7 @@ type EmptyExpression = {
 
 type ExtendedExpression = Expression | EmptyExpression
 
-const isUnaryOperator = (op: string) => ["!", "-", "+", "typeof"].includes(op)
+const isUnaryOperator = (op: string) => ["!"].includes(op)
 
 const createEmptyExpression = (): EmptyExpression => ({ type: "empty" })
 
@@ -528,24 +528,7 @@ function OperationExpressionNode({
 	const [operator, setOperator] = useState(exp.operator)
 	const isUnary = isUnaryOperator(exp.operator)
 
-	const commonOperators = [
-		"+",
-		"-",
-		"*",
-		"/",
-		"%",
-		"==",
-		"===",
-		"!=",
-		"!==",
-		">",
-		">=",
-		"<",
-		"<=",
-		"&&",
-		"||",
-		"!",
-	]
+	const commonOperators = ["+", "-", "*", "/", "==", "!=", ">", ">=", "<", "<=", "and", "or", "!"]
 
 	const handleSave = () => {
 		if (onUpdate) {
@@ -746,10 +729,13 @@ function ExpressionBuilder() {
 }
 
 export default function ExpressionTreeDemo() {
-	const exampleExpression: FunctionCall = createFunction("avg", [
-		createOperation("+", [createVariable("price"), createLiteral(10)]),
-		createOperation("!", [createLiteral(false)]),
-		createLiteral("product"),
+	const exampleExpression = createOperation("*", [
+		createLiteral(86000),
+		createFunction("avg", [
+			createOperation("+", [createVariable("price"), createLiteral(10)]),
+			createOperation("!", [createLiteral(false)]),
+			createLiteral("product"),
+		]),
 	])
 
 	return (
