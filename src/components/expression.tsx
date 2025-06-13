@@ -578,7 +578,9 @@ function OperationExpressionNode({
 
 	const handleOperandDelete = (index: number) => {
 		if (onUpdate) {
-			const newOperands = exp.operands.splice(index)
+			const newOperands = [...exp.operands]
+			newOperands[index] = createEmptyExpression() as any as Expression
+
 			onUpdate({
 				...exp,
 				operands: newOperands,
